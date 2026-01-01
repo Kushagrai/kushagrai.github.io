@@ -13,7 +13,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #050505; /* Deep void black */
+            background-color: #050505; 
             font-family: 'JetBrains Mono', monospace;
         }
 
@@ -32,7 +32,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 2;
-            pointer-events: none; /* Let clicks pass through to canvas */
+            pointer-events: none; 
             text-align: center;
             width: 100%;
             display: flex;
@@ -40,21 +40,21 @@
             align-items: center;
         }
 
-        /* --- BADGE (Your Exact Styles) --- */
+        
         .badge {
             display: inline-block;
             font-family: 'Syncopate', sans-serif;
-            background: rgba(100, 255, 218, 0.05); /* Subtle Teal Tint */
+            background: rgba(100, 255, 218, 0.05); 
             padding: 8px 16px;
             border-radius: 100px;
-            border: 1px solid rgba(100, 255, 218, 0.3); /* Teal Border */
+            border: 1px solid rgba(100, 255, 218, 0.3); 
             font-size: 0.7rem;
-            color: #64ffda; /* Teal Text to match UI */
+            color: #64ffda; 
             letter-spacing: 0.3em;
             margin-bottom: 1.5rem;
             backdrop-filter: blur(4px);
             text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1); /* Initial Glow */
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1); 
             
             opacity: 0;
             animation: fadeIn 2s ease-out forwards, syncPulse 4s infinite ease-in-out 1s;
@@ -71,14 +71,14 @@
             }
         }
 
-        /* --- GLITCH WRAPPER --- */
+        
         .glitch-wrapper {
             display: inline-block;
             position: relative;
-            pointer-events: auto; /* Enable hover for JS effect */
+            pointer-events: auto; 
         }
 
-        /* --- MAIN TEXT (Your Exact Styles) --- */
+        
         .glitch-text {
             font-size: 4rem;
             color: #ffffff;
@@ -86,16 +86,16 @@
             font-weight: 700;
             position: relative;
             text-transform: uppercase;
-            white-space: nowrap; /* Prevent line breaking during scramble */
+            white-space: nowrap;
         }
         
-        /* Style for the "scrambling" characters in JS */
+        
         .dud {
             color: #64ffda;
             opacity: 0.7;
         }
 
-        /* Responsive Text */
+        
         @media (max-width: 768px) {
             .glitch-text {
                 font-size: 2.5rem;
@@ -107,8 +107,7 @@
             }
         }
 
-        /* --- THE ZAP EFFECT (CSS Pseudo-elements) --- */
-        /* These use attr(data-text) which JS will now update dynamically */
+        
         .glitch-text::before,
         .glitch-text::after {
             content: attr(data-text);
@@ -214,16 +213,14 @@
     <div class="content-wrapper">
         <div class="badge">coming 2026</div>
         <div class="glitch-wrapper">
-            <!-- data-text initialized to main text -->
+            
             <h1 class="glitch-text" data-text="LAUNCHING SOON">LAUNCHING SOON</h1>
         </div>
         <div class="sub-text">Something cool is being built.</div>
     </div>
 
     <script>
-        /**
-         * 1. PARTICLE SYSTEM (Your Original Code)
-         */
+       
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         
@@ -333,9 +330,7 @@
         animate();
 
 
-        /**
-         * 2. NEURAL DECODE TEXT EFFECT (Integrated with CSS Glitch)
-         */
+
         
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=[]{}|;:,.<>/?';
         
@@ -368,7 +363,7 @@
 
             update() {
                 let output = '';
-                let rawOutput = ''; // Pure text for the CSS glitch attribute
+                let rawOutput = ''; 
                 let complete = 0;
                 
                 for (let i = 0, n = this.queue.length; i < n; i++) {
@@ -383,9 +378,9 @@
                             char = this.randomChar();
                             this.queue[i].char = char;
                         }
-                        // HTML Output (for color)
+                       
                         output += `<span class="dud">${char}</span>`;
-                        // Raw Output (for CSS data-text)
+                        
                         rawOutput += char;
                     } else {
                         output += from;
@@ -395,7 +390,7 @@
 
                 this.el.innerHTML = output; 
                 
-                // CRITICAL FIX: Sync the data-text attribute so the CSS glitch ghosts match the scramble
+                
                 this.el.setAttribute('data-text', rawOutput);
 
                 if (complete === this.queue.length) {
@@ -411,16 +406,16 @@
             }
         }
 
-        // Initialize and trigger
-        const el = document.querySelector('.glitch-text'); // Targeted the correct class from your file
+        
+        const el = document.querySelector('.glitch-text'); 
         const fx = new TextScramble(el);
         
-        // Trigger on Load
+        
         setTimeout(() => {
             fx.setText('LAUNCHING SOON');
         }, 500);
 
-        // Trigger on Hover
+        
         el.addEventListener('mouseover', () => {
             fx.setText('LAUNCHING SOON');
         });
@@ -428,3 +423,4 @@
     </script>
 </body>
 </html>
+
