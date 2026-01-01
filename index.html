@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Launching Soon</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0;
@@ -35,6 +35,40 @@
             pointer-events: none; /* Let clicks pass through to canvas */
             text-align: center;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-block;
+            font-family: 'Syncopate', sans-serif;
+            background: rgba(100, 255, 218, 0.05); /* Subtle Teal Tint */
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(100, 255, 218, 0.3); /* Teal Border */
+            font-size: 0.7rem;
+            color: #64ffda; /* Teal Text to match UI */
+            letter-spacing: 0.3em;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1); /* Initial Glow */
+            
+            opacity: 0;
+            /* Combined Fade In + Continuous Sync Pulse */
+            animation: fadeIn 2s ease-out forwards, syncPulse 4s infinite ease-in-out 1s;
+        }
+
+        @keyframes syncPulse {
+            0%, 100% {
+                border-color: rgba(100, 255, 218, 0.3);
+                box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+            }
+            50% {
+                border-color: rgba(100, 255, 218, 0.8);
+                box-shadow: 0 0 25px rgba(100, 255, 218, 0.4);
+            }
         }
 
         .glitch-wrapper {
@@ -56,6 +90,10 @@
             .glitch-text {
                 font-size: 2.5rem;
                 letter-spacing: -1px;
+            }
+            .badge {
+                font-size: 0.6rem;
+                padding: 6px 12px;
             }
         }
 
@@ -163,6 +201,7 @@
     <canvas id="canvas"></canvas>
 
     <div class="content-wrapper">
+        <div class="badge">coming 2026</div>
         <div class="glitch-wrapper">
             <h1 class="glitch-text" data-text="LAUNCHING SOON">LAUNCHING SOON</h1>
         </div>
@@ -245,9 +284,7 @@
                         // Force magnitude (stronger when closer)
                         const force = (mouseDistance - distance) / mouseDistance;
                         
-                        // Apply force (repulsion) - change direction to - to make it attraction
-                        // We want a subtle drift away from mouse to clear path, or swirl.
-                        // Let's do a gentle push away to ripple the web.
+                        // Apply force (repulsion)
                         const directionX = forceDirectionX * force * 5;
                         const directionY = forceDirectionY * force * 5;
 
