@@ -40,6 +40,7 @@
             align-items: center;
         }
 
+        /* --- BADGE (Your Exact Styles) --- */
         .badge {
             display: inline-block;
             font-family: 'Syncopate', sans-serif;
@@ -55,9 +56,8 @@
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(100, 255, 218, 0.1); /* Initial Glow */
             
-            opacity: 1;
-            /* Combined Fade In + Continuous Sync Pulse */
-            animation: fadeIn 2s ease-out, syncPulse 4s infinite ease-in-out 1s;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards, syncPulse 4s infinite ease-in-out 1s;
         }
 
         @keyframes syncPulse {
@@ -71,11 +71,14 @@
             }
         }
 
+        /* --- GLITCH WRAPPER --- */
         .glitch-wrapper {
             display: inline-block;
             position: relative;
+            pointer-events: auto; /* Enable hover for JS effect */
         }
 
+        /* --- MAIN TEXT (Your Exact Styles) --- */
         .glitch-text {
             font-size: 4rem;
             color: #ffffff;
@@ -83,6 +86,13 @@
             font-weight: 700;
             position: relative;
             text-transform: uppercase;
+            white-space: nowrap; /* Prevent line breaking during scramble */
+        }
+        
+        /* Style for the "scrambling" characters in JS */
+        .dud {
+            color: #64ffda;
+            opacity: 0.7;
         }
 
         /* Responsive Text */
@@ -97,7 +107,8 @@
             }
         }
 
-        /* Glitch Effect CSS */
+        /* --- THE ZAP EFFECT (CSS Pseudo-elements) --- */
+        /* These use attr(data-text) which JS will now update dynamically */
         .glitch-text::before,
         .glitch-text::after {
             content: attr(data-text);
@@ -176,7 +187,7 @@
             87.5% { clip: rect(19px, 9999px, 49px, 0); }
             91.66% { clip: rect(37px, 9999px, 72px, 0); }
             95.83% { clip: rect(60px, 9999px, 88px, 0); }
-            100% { clip: rect(22px, 9999px, 11px, 0); }
+            100% { clip: rect(47px, 9999px, 93px, 0); }
         }
         
         .sub-text {
@@ -191,10 +202,8 @@
         }
 
         @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
+            to { opacity: 1; }
+        }
 
     </style>
 </head>
@@ -205,6 +214,7 @@
     <div class="content-wrapper">
         <div class="badge">coming 2026</div>
         <div class="glitch-wrapper">
+            <!-- data-text initialized to main text -->
             <h1 class="glitch-text" data-text="LAUNCHING SOON">LAUNCHING SOON</h1>
         </div>
         <div class="sub-text">Something cool is being built.</div>
@@ -212,42 +222,27 @@
 
     <script>
         /**
-         * High FPS Interactive Particle System
-         * Logic:
-         * 1. Create a grid of particles.
-         * 2. Particles drift slowly.
-         * 3. Mouse proximity triggers a "repulsion" and "connection" effect.
-         * 4. Lines are drawn between particles that are close enough.
+         * 1. PARTICLE SYSTEM (Your Original Code)
          */
-        
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         
         let width, height;
         let particles = [];
         
-        // Configuration
-        const particleCount = 100; // Adjust based on screen size in init
+        const particleCount = 100;
         const connectionDistance = 120;
         const mouseDistance = 200;
         
-        // Mouse State
-        let mouse = {
-            x: null,
-            y: null
-        };
+        let mouse = { x: null, y: null };
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = e.x;
             mouse.y = e.y;
         });
 
-        // Handle Resize
-        window.addEventListener('resize', () => {
-            init();
-        });
+        window.addEventListener('resize', () => { init(); });
 
-        // Touch support for mobile
         window.addEventListener('touchmove', (e) => {
             mouse.x = e.touches[0].clientX;
             mouse.y = e.touches[0].clientY;
@@ -257,36 +252,28 @@
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 1; // Velocity X
-                this.vy = (Math.random() - 0.5) * 1; // Velocity Y
+                this.vx = (Math.random() - 0.5) * 1; 
+                this.vy = (Math.random() - 0.5) * 1; 
                 this.size = Math.random() * 2 + 1;
-                this.color = '#ffffff'; // Base particle color
+                this.color = '#ffffff'; 
             }
 
             update() {
-                // Move particle
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Bounce off edges
                 if (this.x < 0 || this.x > width) this.vx = -this.vx;
                 if (this.y < 0 || this.y > height) this.vy = -this.vy;
 
-                // Mouse Interaction
                 if (mouse.x != null) {
                     let dx = mouse.x - this.x;
                     let dy = mouse.y - this.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
 
                     if (distance < mouseDistance) {
-                        // Calculate force direction
                         const forceDirectionX = dx / distance;
                         const forceDirectionY = dy / distance;
-
-                        // Force magnitude (stronger when closer)
                         const force = (mouseDistance - distance) / mouseDistance;
-                        
-                        // Apply force (repulsion)
                         const directionX = forceDirectionX * force * 5;
                         const directionY = forceDirectionY * force * 5;
 
@@ -309,9 +296,7 @@
             height = window.innerHeight;
             canvas.width = width;
             canvas.height = height;
-            
             particles = [];
-            // Responsive particle count calculation
             const numberOfParticles = (width * height) / 9000; 
             for (let i = 0; i < numberOfParticles; i++) {
                 particles.push(new Particle());
@@ -326,7 +311,6 @@
                 particles[i].update();
                 particles[i].draw();
 
-                // Connect particles
                 for (let j = i; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
@@ -334,9 +318,8 @@
 
                     if (distance < connectionDistance) {
                         ctx.beginPath();
-                        // Opacity based on distance (fade out line as they get further)
                         const opacity = 1 - (distance / connectionDistance);
-                        ctx.strokeStyle = 'rgba(100, 255, 218, ' + opacity * 0.5 + ')'; // Cyan/Teal tint
+                        ctx.strokeStyle = 'rgba(100, 255, 218, ' + opacity * 0.5 + ')'; 
                         ctx.lineWidth = 1;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -348,6 +331,100 @@
 
         init();
         animate();
+
+
+        /**
+         * 2. NEURAL DECODE TEXT EFFECT (Integrated with CSS Glitch)
+         */
+        
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=[]{}|;:,.<>/?';
+        
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = chars;
+                this.update = this.update.bind(this);
+            }
+
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40); 
+                    const end = start + Math.floor(Math.random() * 40); 
+                    this.queue.push({ from, to, start, end });
+                }
+
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+
+            update() {
+                let output = '';
+                let rawOutput = ''; // Pure text for the CSS glitch attribute
+                let complete = 0;
+                
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to;
+                        rawOutput += to;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) { 
+                            char = this.randomChar();
+                            this.queue[i].char = char;
+                        }
+                        // HTML Output (for color)
+                        output += `<span class="dud">${char}</span>`;
+                        // Raw Output (for CSS data-text)
+                        rawOutput += char;
+                    } else {
+                        output += from;
+                        rawOutput += from;
+                    }
+                }
+
+                this.el.innerHTML = output; 
+                
+                // CRITICAL FIX: Sync the data-text attribute so the CSS glitch ghosts match the scramble
+                this.el.setAttribute('data-text', rawOutput);
+
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+
+            randomChar() {
+                return this.chars[Math.floor(Math.random() * this.chars.length)];
+            }
+        }
+
+        // Initialize and trigger
+        const el = document.querySelector('.glitch-text'); // Targeted the correct class from your file
+        const fx = new TextScramble(el);
+        
+        // Trigger on Load
+        setTimeout(() => {
+            fx.setText('LAUNCHING SOON');
+        }, 500);
+
+        // Trigger on Hover
+        el.addEventListener('mouseover', () => {
+            fx.setText('LAUNCHING SOON');
+        });
+
     </script>
 </body>
 </html>
